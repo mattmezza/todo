@@ -7,8 +7,11 @@ todo
 Installation
 ===
 
-Installing `todo` is very easy: you just need to clone this very same repo at the latest release and then source the `todo.sh` file in your bash profile. Here's how I do it in my [dotfiles](https://github.com/mattmezza/dotfiles).
+Installing `todo` is very easy: you just need to clone this very same repo at the latest release and then source the `todo.sh` file in your bash profile. Here's how I do it in my [dotfiles](https://github.com/mattmezza/dotfiles) (see plugins.sh and plugins.txt).
 
+```bash
+git clone --branch 1.0.0 git@github.com:mattmezza/todo.git && source todo/todo.sh 
+```
 
 Usage
 ===
