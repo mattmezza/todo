@@ -3,6 +3,8 @@ todo
 
 `todo` is a utility for quickly keep track of your todos without leaving the comfort of your terminal.
 
+![](todo.gif)
+
 
 Installation
 ===
