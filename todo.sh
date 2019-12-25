@@ -39,6 +39,26 @@ todo() {
 			done
 			WHEN_VIEW=$(echo $WHEN_VIEW | uniq | sort)
 			;;
+		next-week|nw)
+			DOW=$(date "+%u")
+			NEXT_MON=$((8 - $DOW))
+			WHEN_VIEW=""
+			for i in {$NEXT_MON..$(($NEXT_MON + 6))}
+			do
+				WHEN_VIEW="$WHEN_VIEW$(date -v+${i}d "+%Y-%m-%d")\n"
+			done
+			WHEN_VIEW=$(echo $WHEN_VIEW | uniq | sort)
+			;;
+		last-week|lw)
+			DOW=$(date "+%u")
+			LAST_MON=$((6 + $DOW))
+			WHEN_VIEW=""
+			for i in {$LAST_MON..$(($LAST_MON - 6))}
+			do
+				WHEN_VIEW="$WHEN_VIEW$(date -v-${i}d "+%Y-%m-%d")\n"
+			done
+			WHEN_VIEW=$(echo $WHEN_VIEW | uniq | sort)
+			;;
 		*)
 			if [[ $2 =~ ^[+-][0-9]+d$ ]]; then
 				WHEN_VIEW=$(date -v$2 "+%Y-%m-%d")
@@ -90,6 +110,8 @@ todo() {
 			echo "  tomorrow|tomo|tm"
 			echo "  yesterday|y"
 			echo "  week|w"
+			echo "  next-week|nw"
+			echo "  last-week|lw"
 			echo "  a temporal interaval referred to today's date (e.g. +2d, -2d etc...)."
 			echo "When CMD is 'view', it can also be a string matching the format '%Y-%m-%d' to list all the items in different days. If no WHEN is passed, 'today' is assumed."
 			echo ""
