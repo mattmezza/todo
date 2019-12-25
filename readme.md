@@ -4,8 +4,6 @@ todo
 `todo` is a utility for quickly keep track of your todos without leaving the comfort of your terminal.
 
 ![](todo.gif)
-
-
 Installation
 ===
 
@@ -39,6 +37,9 @@ WHEN can be:
   today|t
   tomorrow|tomo|tm
   yesterday|y
+  week|w
+  next-week|nw
+  last-week|lw
   a temporal interaval referred to today's date (e.g. +2d, -2d etc...).
 When CMD is 'view', it can also be a string matching the format '%Y-%m-%d' to list all the items in different days. If no WHEN is passed, 'today' is assumed.
 
@@ -47,12 +48,17 @@ $ todo add 'Buy milk'
 $ todo rm 'Buy milk'
 $ todo view tomorrow
 $ todo view 2019-11
+$ todo view week
 $ todo left today
 $ todo did yesterday
 $ todo done 'Buy milk' yesterday
 $ todo undone|u 'Buy milk' yesterday
 $ todo carry-on
 ```
+
+#### Note on `week`
+
+A week is to be intended from **Monday** to **Sunday**.
 
 #### todo carry-on
 
