@@ -26,6 +26,19 @@ todo() {
 		tomorrow|tm|tomo)
 			WHEN_VIEW=$(date -v+1d "+%Y-%m-%d")
 			;;
+		week|w)
+			DOW=$(date "+%u")
+			WHEN_VIEW=""
+			for i in {$(($DOW - 1))..0}
+			do
+				WHEN_VIEW="$WHEN_VIEW$(date -v-${i}d "+%Y-%m-%d")\n"
+			done
+			for i in {1..$((7 - $dow))}
+			do
+				WHEN_VIEW="$WHEN_VIEW$(date -v+${i}d "+%Y-%m-%d")\n"
+			done
+			WHEN_VIEW=$(echo $WHEN_VIEW | uniq | sort)
+			;;
 		*)
 			if [[ $2 =~ ^[+-][0-9]+d$ ]]; then
 				WHEN_VIEW=$(date -v$2 "+%Y-%m-%d")
@@ -76,6 +89,7 @@ todo() {
 			echo "  today|t"
 			echo "  tomorrow|tomo|tm"
 			echo "  yesterday|y"
+			echo "  week|w"
 			echo "  a temporal interaval referred to today's date (e.g. +2d, -2d etc...)."
 			echo "When CMD is 'view', it can also be a string matching the format '%Y-%m-%d' to list all the items in different days. If no WHEN is passed, 'today' is assumed."
 			echo ""
@@ -84,6 +98,7 @@ todo() {
 			echo "$ $0 rm 'Buy milk'"
 			echo "$ $0 view tomorrow"
 			echo "$ $0 view 2019-11"
+			echo "$ $0 view week"
 			echo "$ $0 left today"
 			echo "$ $0 did yesterday"
 			echo "$ $0 done 'Buy milk' yesterday"
@@ -92,15 +107,13 @@ todo() {
 			echo ""
 			;;
 		view|v)
-			find "$TODO_DIR" -name "$WHEN_VIEW*.md" -type f -exec basename {} .md \; -exec cat {} \; -exec echo "" \; 2> /dev/null || echo "No todos for $WHEN_VIEW."
+			echo $WHEN_VIEW | xargs -I __ find "$TODO_DIR" -name "__*.md" -type f -exec basename {} .md \; -exec cat {} \; -exec echo "" \; 2> /dev/null || echo "No todos for __."
 			;;
 		left|l)
-			echo "$WHEN_VIEW"
-			$0 view "$WHEN_VIEW" | grep -e "^\- \[ \] .*$"
+			$0 view "$WHEN_VIEW" | grep -e "^\- \[ \] .*$" -e '^20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]$' -e '^$'
 			;;
 		did)
-			echo "$WHEN_VIEW"
-			$0 view "$WHEN_VIEW" | grep -e "^\- \[x\] .*$"
+			$0 view "$WHEN_VIEW" | grep -e "^\- \[x\] .*$" -e '^20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]$' -e '^$'
 			;;
 		carry-on|co)
 			$0 left yesterday | tail -n 1 >> "$TODO_DIR/$TODAY.md"
