@@ -77,17 +77,29 @@ todo() {
 			;;
 		remove|rm)
 			WHEN=${WHEN:-$TODAY}
-			sed -i "" "/^\- \[[ x]\] $2$/d" "$TODO_DIR/$WHEN.md"
+			if [[ $2 =~ '^[0-9]+$' ]] ; then
+				sed -i "" "$2d" "$TODO_DIR/$WHEN.md"
+			else
+				sed -i "" "/^\- \[[ x]\] $2$/d" "$TODO_DIR/$WHEN.md"
+			fi
 			$0 view "$WHEN"
 			;;
 		done|d)
 			WHEN=${WHEN:-$TODAY}
-			sed -i "" "s/^\- \[ \] $2$/- [x] $2/g" "$TODO_DIR/$WHEN.md"
+			if [[ $2 =~ '^[0-9]+$' ]] ; then
+				sed -i "" "$2s/^\- \[ \]/- [x]/g" "$TODO_DIR/$WHEN.md"
+			else
+				sed -i "" "s/^\- \[ \] $2$/- [x] $2/g" "$TODO_DIR/$WHEN.md"
+			fi
 			$0 view "$WHEN"
 			;;
 		undone|u)
 			WHEN=${WHEN:-$TODAY}
-			sed -i "" "s/^\- \[x\] $2$/- [ ] $2/g" "$TODO_DIR/$WHEN.md"
+			if [[ $2 =~ '^[0-9]+$' ]] ; then
+				sed -i "" "$2s/^\- \[x\]/- [ ]/g" "$TODO_DIR/$WHEN.md"
+			else
+				sed -i "" "s/^\- \[x\] $2$/- [ ] $2/g" "$TODO_DIR/$WHEN.md"
+			fi
 			$0 view "$WHEN"
 			;;
 		help|h)
