@@ -1,12 +1,13 @@
 todo() {
 	TODAY=$(date "+%Y-%m-%d")
+	TOMORROW=$(date -v+1d "+%Y-%m-%d")
 	TODO_DIR=${TODO_DIR_DEFAULT:-"$HOME/todo"}
 	case "$3" in
 		today|t)
 			WHEN=$TODAY
 			;;
 		tomorrow|tm|tomo)
-			WHEN=$(date -v+1d "+%Y-%m-%d")
+			WHEN=$TOMORROW
 			;;
 		*)
 			if [[ $3 =~ ^[+-][0-9]+d$ ]]; then
@@ -24,7 +25,7 @@ todo() {
 			WHEN_VIEW=$(date -v-1d "+%Y-%m-%d")
 			;;
 		tomorrow|tm|tomo)
-			WHEN_VIEW=$(date -v+1d "+%Y-%m-%d")
+			WHEN_VIEW=$TOMORROW
 			;;
 		week|w)
 			DOW=$(date "+%u")
@@ -113,7 +114,8 @@ todo() {
 			echo "  'left|l' to print the items left to do for WHEN"
 			echo "  'did' to print the items already did for WHEN"
 			echo "  'done|d' or undone|u to mark or unmark the item as done"
-			echo "  'carry-on|co moves yesterday's undone items to today's list"
+			echo "  'carry-on|co' moves yesterday's undone items to today's list"
+			echo "  'push' moves todays's undone items to tomorrow's list"
 			echo "  'help|h' prints this message"
 			echo "If no command is passed, 'view' is assumed."
 			echo ""
@@ -138,6 +140,7 @@ todo() {
 			echo "$ $0 done 'Buy milk' yesterday"
 			echo "$ $0 undone|u 'Buy milk' yesterday"
 			echo "$ $0 carry-on"
+			echo "$ $0 push"
 			echo ""
 			;;
 		view|v)
@@ -150,8 +153,12 @@ todo() {
 			$0 view "$WHEN_VIEW" | grep -e "^\- \[x\] .*$" -e '^20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]$' -e '^$'
 			;;
 		carry-on|co)
-			$0 left yesterday | tail -n 1 >> "$TODO_DIR/$TODAY.md"
+			$0 left yesterday | tail -n +2 | head -n +2 >> "$TODO_DIR/$TODAY.md"
 			$0 view today
+			;;
+		push)
+			$0 left today | tail -n +2 | head -n +2 >> "$TODO_DIR/$TOMORROW.md"
+			$0 view tomorrow
 			;;
 		*)
 			$0 view today

@@ -33,7 +33,8 @@ CMD can be:
   'left|l' to print the items left to do for WHEN
   'did' to print the items already did for WHEN
   'done|d' or undone|u to mark or unmark the item as done
-  'carry-on|co moves yesterday's undone items to today's list
+  'carry-on|co' moves yesterday's undone items to today's list
+  'push' moves today's undone items to tomorrow's list
   'help|h' prints this message
 If no command is passed, 'view' is assumed.
 
@@ -58,6 +59,7 @@ $ todo did yesterday
 $ todo done 'Buy milk' yesterday
 $ todo undone|u 'Buy milk' yesterday
 $ todo carry-on
+$ todo push
 ```
 
 #### Note on `week`
@@ -65,6 +67,10 @@ $ todo carry-on
 A week is to be intended from **Monday** to **Sunday**.
 
 #### todo carry-on
+
+This command takes all the items for yesterday that are not marked as done, and carries them over to today's todo list (I tend to ask too much from myself).
+
+#### todo push
 
 This command takes all the items for today that are not marked as done, and carries them over to tomorrow's todo list (I am a bloody procrastinator).
 
